@@ -1,3 +1,5 @@
+import numpy as np
+
 class LogisticRegressor:
     def __init__(self):
         """
@@ -72,18 +74,18 @@ class LogisticRegressor:
         - self.weights: The weights of the model after training.
         - self.bias: The bias of the model after training.
         """
-        # TODO: Obtain m (number of examples) and n (number of features)
-        m = None
-        n = None
+        # Obtain m (number of examples) and n (number of features)
+        m = X.shape[0]
+        n = X.shape[1]
 
-        # TODO: Initialize all parameters to 0
-        self.weights = None
+        # Initialize all parameters to 0
+        self.weights = np.zeros(n)
         self.bias = 0
 
         # TODO: Complete the gradient descent code
         # Tip: You can use the code you had in the previous practice
         # Execute the iterative gradient descent
-        for i in range(None):  # Fill the None here
+        for i in range(num_iterations):
 
             # For these two next lines, you will need to implement the respective functions
             # Forward propagation
