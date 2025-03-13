@@ -266,7 +266,7 @@ class LogisticRegressor:
         - The computed loss value as a scalar.
         """
 
-        # TODO: Implement the loss function (log-likelihood)
+        # Implement the loss function (log-likelihood)
         m = y.shape[0]  # Number of examples
         loss = -(1 / m) * np.sum(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
         return loss
