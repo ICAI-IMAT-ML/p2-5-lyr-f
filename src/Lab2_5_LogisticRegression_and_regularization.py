@@ -97,10 +97,11 @@ class LogisticRegressor:
             if i % print_every == 0 and verbose:
                 print(f"Iteration {i}: Loss {loss}")
 
-            # TODO: Implement the gradient values
+            # Implement the gradient values
             # CAREFUL! You need to calculate the gradient of the loss function (*negative log-likelihood*)
-            dw = None  # Derivative w.r.t. the coefficients
-            db = None  # Derivative w.r.t. the intercept
+
+            dw = np.sum(X.T @ (y_hat - y))  # Derivative w.r.t. the coefficients
+            db =   np.sum(y_hat - y)# Derivative w.r.t. the intercept
 
             # Regularization:
             # Apply regularization if it is selected.
@@ -130,8 +131,9 @@ class LogisticRegressor:
         - A numpy array of shape (m, 1) containing the probability of the positive class for each sample.
         """
 
-        # TODO: z is the value of the logits. Write it here (use self.weights and self.bias):
-        z = None
+        # z is the value of the logits. Write it here (use self.weights and self.bias):
+
+        z = X @ self.weights + self.bias
 
         # Return the associated probabilities via the sigmoid trasnformation (symmetric choice)
         return self.sigmoid(z)
@@ -150,9 +152,9 @@ class LogisticRegressor:
         - A numpy array of shape (m,) containing the class label (0 or 1) for each sample.
         """
 
-        # TODO: Predict the class for each input data given the threshold in the argument
+        # Predict the class for each input data given the threshold in the argument
         probabilities = self.predict_proba(X)
-        classification_result = None
+        classification_result = (probabilities > threshold).astype(int)
 
         return classification_result
 
@@ -177,9 +179,9 @@ class LogisticRegressor:
                       after applying L1 regularization.
         """
 
-        # TODO:
         # ADD THE LASSO CONTRIBUTION TO THE DERIVATIVE OF THE OBJECTIVE FUNCTION
-        lasso_gradient = None
+
+        lasso_gradient = (C / m) * np.sign(self.weights)
         return dw + lasso_gradient
 
     def ridge_regularization(self, dw, m, C):
@@ -203,9 +205,9 @@ class LogisticRegressor:
                         after applying L2 regularization.
         """
 
-        # TODO:
         # ADD THE RIDGE CONTRIBUTION TO THE DERIVATIVE OF THE OBJECTIVE FUNCTION
-        ridge_gradient = None
+
+        ridge_gradient = (C / m) * self.weights
         return dw + ridge_gradient
 
     def elasticnet_regularization(self, dw, m, C, l1_ratio):
@@ -235,7 +237,7 @@ class LogisticRegressor:
         # TODO:
         # ADD THE RIDGE CONTRIBUTION TO THE DERIVATIVE OF THE OBJECTIVE FUNCTION
         # Be careful! You can reuse the previous results and combine them here, but beware how you do this!
-        elasticnet_gradient = None
+        elasticnet_gradient = (C / m) * (l1_ratio*np.sign(self.weights) + (1-l1_ratio)*self.weights)
         return dw + elasticnet_gradient
 
     @staticmethod
@@ -266,7 +268,7 @@ class LogisticRegressor:
 
         # TODO: Implement the loss function (log-likelihood)
         m = y.shape[0]  # Number of examples
-        loss = None
+        loss = -(1/m) * np.sum(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
         return loss
 
     @staticmethod
@@ -284,7 +286,6 @@ class LogisticRegressor:
         - The sigmoid of z.
         """
 
-        # TODO: Implement the sigmoid function to convert the logits into probabilities
-        sigmoid_value = None
+        sigmoid_value = 1 / (1 + np.exp(-z))
 
         return sigmoid_value
