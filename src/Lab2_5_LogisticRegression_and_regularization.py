@@ -82,7 +82,7 @@ class LogisticRegressor:
         self.weights = np.zeros(n)
         self.bias = 0
 
-        # TODO: Complete the gradient descent code
+        # Complete the gradient descent code
         # Tip: You can use the code you had in the previous practice
         # Execute the iterative gradient descent
         for i in range(num_iterations):
@@ -100,8 +100,8 @@ class LogisticRegressor:
             # Implement the gradient values
             # CAREFUL! You need to calculate the gradient of the loss function (*negative log-likelihood*)
 
-            dw = np.sum(X.T @ (y_hat - y))  # Derivative w.r.t. the coefficients
-            db =   np.sum(y_hat - y)# Derivative w.r.t. the intercept
+            dw = (1 / m) * (X.T @ (y_hat - y))  # Derivative w.r.t. the coefficients
+            db =   db = (1 / m) * np.sum(y_hat - y) # Derivative w.r.t. the intercept
 
             # Regularization:
             # Apply regularization if it is selected.
@@ -267,8 +267,9 @@ class LogisticRegressor:
         """
 
         # Implement the loss function (log-likelihood)
+        epsilon = 1e-10  # Small value to avoid log(0)
         m = y.shape[0]  # Number of examples
-        loss = -(1 / m) * np.sum(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
+        loss = -(1 / m) * np.sum(y * np.log(y_hat + epsilon) + (1 - y) * np.log(1 - y_hat + epsilon))
         return loss
 
     @staticmethod
@@ -285,6 +286,7 @@ class LogisticRegressor:
         Returns:
         - The sigmoid of z.
         """
+        z = np.clip(z, -500, 500)  # Clip values to avoid overflow
 
         sigmoid_value = 1 / (1 + np.exp(-z))
 
